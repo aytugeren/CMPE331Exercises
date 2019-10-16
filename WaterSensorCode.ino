@@ -51,3 +51,4 @@ delay(500);
  delay(500);
 }
 }
+Web Site = http://blog.ikizoglu.com/2018/03/arduino-toprak-nem-sensoru-kullanimi/
