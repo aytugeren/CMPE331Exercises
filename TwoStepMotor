@@ -1,0 +1,38 @@
+#include <X113647Stepper.h>
+
+static const int STEPS_PER_REVOLUTION = 64 * 32;
+int nemdeger=0;
+int sensor = A0;
+float metalDetected;
+int monitoring;
+int metalDetection = A1;
+
+X113647Stepper myStepper(STEPS_PER_REVOLUTION, 8, 9, 10, 11);
+X113647Stepper myStepper1(STEPS_PER_REVOLUTION, 2 ,3, 4, 5);
+void setup() {
+  pinMode(sensor, INPUT);
+  
+  myStepper.setSpeed(500);
+  myStepper1.setSpeed(500);
+  Serial.begin(9600);
+}
+
+void loop() {
+  
+  monitoring = analogRead(metalDetection);
+  metalDetected = (float)monitoring*100/1024.0;
+  Serial.print("Nem:");
+  Serial.println(nemdeger);
+  nemdeger = analogRead(A0);
+  if(nemdeger < 900){
+  Serial.print("Nem:");
+  Serial.println(nemdeger);
+  myStepper.step(STEPS_PER_REVOLUTION);
+  myStepper.step(-STEPS_PER_REVOLUTION);
+  nemdeger = 1000 ;
+  }
+  if(monitoring < 250){
+    myStepper1.step(STEPS_PER_REVOLUTION);
+    myStepper1.step(-STEPS_PER_REVOLUTION);
+  }
+}
