@@ -1,0 +1,28 @@
+#include <X113647Stepper.h>
+
+static const int STEPS_PER_REVOLUTION = 64 * 32;
+int nemdeger=0;
+int sensor = A0;
+
+X113647Stepper myStepper(STEPS_PER_REVOLUTION, 8, 9, 10, 11);
+
+void setup() {
+  pinMode(sensor, INPUT);
+  Serial.begin(9600);
+  myStepper.setSpeed(500);
+}
+
+void loop() {
+  Serial.print("Nem:");
+  Serial.println(nemdeger);
+  nemdeger = analogRead(A0);
+  if(nemdeger < 900){
+  Serial.print("Nem:");
+  Serial.println(nemdeger);
+  myStepper.step(STEPS_PER_REVOLUTION);
+  delay(500);
+  myStepper.step(-STEPS_PER_REVOLUTION);
+  delay(500);
+  nemdeger = 1000;
+  }
+}
