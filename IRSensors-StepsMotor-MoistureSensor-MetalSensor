@@ -1,0 +1,57 @@
+#include <X113647Stepper.h>
+#include <Servo.h>
+
+Servo motor;
+static const int STEPS_PER_REVOLUTION = 500;
+int nemdeger=0;
+int sensor = A0;
+int IRSensor = A2;
+float metalDetected;
+int monitoring;
+int metalDetection = A1;
+int monitoringIR;
+int monitoringIR2;
+int value = 0;
+int IRSensor1 = A3;
+
+X113647Stepper myStepper(STEPS_PER_REVOLUTION, 8, 9, 10, 11);
+X113647Stepper myStepper1(STEPS_PER_REVOLUTION, 2 ,3, 4, 5);
+void setup() {
+  pinMode(IRSensor, INPUT);
+  myStepper.setSpeed(35);
+  myStepper1.setSpeed(35);
+  Serial.begin(9600);
+}
+
+void loop() {
+  monitoringIR = analogRead(IRSensor);
+  monitoringIR2 = analogRead(IRSensor1);
+  Serial.println(monitoringIR2);
+  if(monitoringIR <500){
+    while(true){
+    value = value + 1;
+    Serial.println(value);
+   if(value > 600){
+    break;
+  }
+  monitoring = analogRead(metalDetection);
+  metalDetected = (float)monitoring*100/1024.0;
+  nemdeger = analogRead(A0);
+  if(nemdeger < 900){
+  myStepper.step(STEPS_PER_REVOLUTION);
+  myStepper.step(-STEPS_PER_REVOLUTION-100);
+  nemdeger = 1000 ;
+  
+  }
+  if(monitoringIR2 > 100){
+   if(monitoring < 250){
+    myStepper1.step(STEPS_PER_REVOLUTION);
+    myStepper1.step(-STEPS_PER_REVOLUTION);
+
+   } 
+  }
+   
+  }
+}
+value = 0;
+}  
